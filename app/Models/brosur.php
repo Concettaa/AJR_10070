@@ -9,6 +9,9 @@ class brosur extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'id_brosur';
+    public $timestamps = false;
+    
     protected $fillable = [
         'id_brosur', 
         'nama_mobil', 

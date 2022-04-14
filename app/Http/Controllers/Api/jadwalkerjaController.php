@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Validator;
 use App\Models\jadwalkerja;
+use Illuminate\Support\Facades\DB;
 
 class jadwalkerjaController extends Controller
 {
@@ -46,16 +47,22 @@ class jadwalkerjaController extends Controller
     public function store(Request $request){
         $storeData = $request->all();
         $validate = Validator::make($storeData, [
-            'id_jadwal' => 'required',
             'nama_pegawai' => 'required|alpha|max:60',
             'hari' => 'required|alpha',
             'jam_kerja' => 'required|numeric'
         ]);
 
+        $count = DB::table('jadwalkerjas')->count()+1;
+
         if($validate->fails())
             return response(['message' => $validate->errors()],400);
 
-        $jadwalkerja = jadwalkerja::create($storeData);
+        $jadwalkerja = jadwalkerja::create([
+            'id_jadwal' => $count,
+            'nama_pegawai' => $request->nama_pegawai,
+            'hari' => $request->hari,
+            'jam_kerja' => $request->jam_kerja,
+        ]);
         return response([
             'message' => 'Add Jadwal Kerja Success',
             'data' => $jadwalkerja

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Validator;
 use App\Models\role;
-
+use Illuminate\Support\Facades\DB;
 
 class roleController extends Controller
 {
@@ -51,10 +51,15 @@ class roleController extends Controller
             'nama_role' => 'required'
         ]);
 
+        $count = DB::table('roles')->count()+1;
+
         if($validate->fails())
             return response(['message' => $validate->errors()],400);
 
-        $role = role::create($storeData);
+        $role = role::create([
+            'id_role' => $count,
+            'nama_role' => $request->nama_role,
+        ]);
         return response([
             'message' => 'Add Role Success',
             'data' => $role
@@ -103,9 +108,8 @@ class roleController extends Controller
             return response (['message' => $validate->errors()], 400);
         }
 
-        $role->nama_murid = $updateData['nama_murid'];
-        $role->npm = $updateData['npm'];
-        $role->tanggal_lahir = $updateData['tanggal_lahir'];
+        $role->id_role = $updateData['id_role'];
+        $role->nama_role = $updateData['nama_role'];
 
         if($role->save()){
             return response([

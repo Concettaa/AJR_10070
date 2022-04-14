@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Validator;
 use App\Models\brosur;
+use Illuminate\Support\Facades\DB;
+
 
 class brosurController extends Controller
 {
@@ -46,7 +48,6 @@ class brosurController extends Controller
     public function store(Request $request){
         $storeData = $request->all();
         $validate = Validator::make($storeData, [
-            'id_brosur' =>  'required|max:60',
             'nama_mobil' => 'required|max:60',
             'tipe_mobil' => 'required|max:60',
             'jenis_transmisi' => 'required|max:60',
@@ -57,10 +58,22 @@ class brosurController extends Controller
             'harga_sewa' => 'required|numeric'
         ]);
 
+        $count = DB::table('brosurs')->count()+1;
+
         if($validate->fails())
             return response(['message' => $validate->errors()],400);
 
-        $brosur = brosur::create($storeData);
+        $brosur = brosur::create([
+            'id_brosur' => $count,
+            'nama_mobil' => $request->nama_mobil,
+            'tipe_mobil' => $request->tipe_mobil,
+            'jenis_transmisi' => $request->jenis_transmisi,
+            'jenis_bahan_bakar' => $request->jenis_bahan_bakar,
+            'warna_mobil' => $request->warna_mobil,
+            'volume_bagasi' => $request->volume_bagasi,
+            'fasilitas' => $request->fasilitas,
+            'harga_sewa' => $request->harga_sewa
+        ]);
         return response([
             'message' => 'Add Brosur Success',
             'data' => $brosur

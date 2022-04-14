@@ -27,8 +27,8 @@ class detailjadwalController extends Controller
         ], 400);
     }
 
-    public function show($id_jadwal){
-        $detailjadwal = detailjadwal::find($id_jadwal);
+    public function show($id_detail){
+        $detailjadwal = detailjadwal::find($id_detail);
 
         if(!is_null($detailjadwal)){
             return response([
@@ -46,22 +46,25 @@ class detailjadwalController extends Controller
     public function store(Request $request){
         $storeData = $request->all();
         $validate = Validator::make($storeData, [
-            'id_pegawai' => 'required|numeric',
-            'id_jadwal' => 'required|numeric'
+            'id_pegawai' => 'required',
+            'id_jadwal' => 'required'
         ]);
 
         if($validate->fails())
             return response(['message' => $validate->errors()],400);
 
-        $detailjadwal = detailjadwal::create($storeData);
+        $detailjadwal = detailjadwal::create([
+            'id_jadwal' => $request->id_jadwal,
+            'id_pegawai' => $request->id_pegawai
+        ]);
         return response([
             'message' => 'Add Detail Jadwal Success',
             'data' => $detailjadwal
         ], 200);
     }
 
-    public function destroy($id_jadwal){
-        $detailjadwal = detailjadwal::find($id_jadwal);
+    public function destroy($id_detail){
+        $detailjadwal = detailjadwal::find($id_detail);
 
         if(is_null($detailjadwal)){
             return response([
@@ -83,8 +86,8 @@ class detailjadwalController extends Controller
         ], 400);
     }
 
-    public function update(Request $request, $id_jadwal){
-        $detailjadwal = detailjadwal::find($id_jadwal);
+    public function update(Request $request, $id_detail){
+        $detailjadwal = detailjadwal::find($id_detail);
         if(is_null($detailjadwal)){
             return response([
                 'message' => 'Detail Jadwal not Found',

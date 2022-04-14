@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Validator;
 use App\Models\customer;
+use Carbon\carbon;
+use Illuminate\Support\Facades\DB;
 
 class customerController extends Controller
 {
@@ -46,21 +48,32 @@ class customerController extends Controller
     public function store(Request $request){
         $storeData = $request->all();
         $validate = Validator::make($storeData, [
-            'id_customer' => 'required',
             'nama_customer' => 'required|alpha|max:60',
             'alamat_customer' => 'required|max:100',
             'tanggal_lahir_customer' => 'required',
             'jenis_kelamin_customer' => 'required',
-            'email_customer' => 'required',
+            'email_customer' => 'required|email:rfc,dns',
             'no_telp_customer' => 'required|digits_between:10,13|numeric|regex:/(08)[0-9]/',
-            'nomor_ktp' => 'required'
-
+            'nomor_ktp' => 'required|min:16|numeric'
         ]);
+
+        $count = DB::table('customers')->count()+1;
+        $generate = sprintf("%03d", $count);
+        $datenow = Carbon::now()->format('ymd');
 
         if($validate->fails())
             return response(['message' => $validate->errors()],400);
 
-        $customer = customer::create($storeData);
+        $customer = customer::create([
+            'id_customer' => 'CUS'.$datenow.'-'.$generate,
+            'nama_customer' => $request->nama_customer,
+            'alamat_customer' => $request->alamat_customer,
+            'tanggal_lahir_customer' => $request->tanggal_lahir_customer,
+            'jenis_kelamin_customer' => $request->jenis_kelamin_customer,
+            'email_customer' => $request->email_customer,
+            'no_telp_customer' => $request->no_telp_customer,
+            'nomor_ktp' => $request->nomor_ktp
+        ]);
         return response([
             'message' => 'Add Customer Success',
             'data' => $customer
@@ -105,9 +118,9 @@ class customerController extends Controller
             'alamat_customer' => 'required|max:100',
             'tanggal_lahir_customer' => 'required',
             'jenis_kelamin_customer' => 'required',
-            'email_customer' => 'required',
+            'email_customer' => 'required|email:rfc,dns',
             'no_telp_customer' => 'required|digits_between:10,13|numeric|regex:/(08)[0-9]/',
-            'nomor_ktp' => 'required'
+            'nomor_ktp' => 'required|min:16|numeric'
         ]);
 
         if($validate->fails()){

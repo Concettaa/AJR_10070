@@ -9,6 +9,10 @@ class transaksi extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'id_transaksi';
+    protected $keyType = 'string';
+    public $timestamps = false;
+
     protected $fillable = [
         'id_transaksi',
         'id_pegawai',
@@ -30,4 +34,29 @@ class transaksi extends Model
         'rating',
         'status_driver'
     ];
+
+    public function pegawai()
+    {
+        return $this->belongsTo(pegawai::class, 'id_pegawai', 'id_pegawai');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(customer::class, 'id_customer', 'id_customer');
+    }
+
+    public function driver()
+    {
+        return $this->belongsTo(driver::class, 'id_driver', 'id_driver');
+    }
+
+    public function promo()
+    {
+        return $this->belongsTo(promo::class, 'kode_promo', 'kode_promo');
+    }
+
+    public function mobil()
+    {
+        return $this->belongsTo(mobil::class, 'plat_mobil', 'plat_mobil');
+    }
 }

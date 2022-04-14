@@ -9,9 +9,14 @@ class promo extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'kode_promo';
+    protected $keyType = 'string';
+    public $timestamps = false;
+
     protected $fillable = [
         'kode_promo',
         'jenis_promo',
-        'keterangan'
+        'keterangan',
+        'nilai_promo'
     ];
 }

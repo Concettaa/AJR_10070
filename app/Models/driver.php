@@ -9,6 +9,10 @@ class driver extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'id_driver';
+    protected $keyType = 'string';
+    public $timestamps = false;
+
     protected $fillable = [
         'id_driver',
         'email_driver',

@@ -9,6 +9,10 @@ class mobilmitra extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'no_ktp_pemilik';
+    protected $keyType = 'string';
+    public $timestamps = false;
+
     protected $fillable = [
       'nama_pemilik',
       'no_ktp_pemilik',

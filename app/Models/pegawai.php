@@ -9,6 +9,9 @@ class pegawai extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'id_pegawai';
+    public $timestamps = false;
+
     protected $fillable = [
         'id_pegawai',
         'nama_pegawai',
@@ -19,4 +22,9 @@ class pegawai extends Model
         'jenis_kelamin_pegawai',
         'id_role'
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(role::class, 'id_role', 'id_role');
+    }
 }

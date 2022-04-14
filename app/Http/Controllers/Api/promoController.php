@@ -48,7 +48,8 @@ class promoController extends Controller
         $validate = Validator::make($storeData, [
             'kode_promo' => 'required',
             'jenis_promo' => 'required',
-            'keterangan' => 'required'
+            'keterangan' => 'required',
+            'nilai_promo' => 'required'
         ]);
 
         if($validate->fails())
@@ -96,18 +97,19 @@ class promoController extends Controller
         $updateData = $request->all();
         $validate = Validator::make($updateData, [
             'jenis_promo' => 'required',
-            'keterangan' => 'required'
+            'keterangan' => 'required',
+            'nilai_promo' => 'required'
         ]);
 
         if($validate->fails()){
             return response (['message' => $validate->errors()], 400);
         }
 
-        $promo->nama_murid = $updateData['nama_murid'];
-        $promo->npm = $updateData['npm'];
-        $promo->tanggal_lahir = $updateData['tanggal_lahir'];
+        $promo->jenis_promo = $updateData['jenis_promo'];
+        $promo->keterangan = $updateData['keterangan'];
+        $promo->nilai_promo = $updateData['nilai_promo'];
 
-        if($student->save()){
+        if($promo->save()){
             return response([
                 'message' => 'Update Promo Success',
                 'data' => $promo
